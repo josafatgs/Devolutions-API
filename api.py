@@ -8,15 +8,12 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def get_employees():
-    res = db.get_devolution()
-    print(res)
-    return jsonify("res")
+    return jsonify("Shopify Api It's Online")
 
 @app.route('/devolution', methods=['POST'])
 def post_devolution():
     try:
         data = request.get_json()
-
         main_reason = data.get('main_reason', "")
         subsidiary = data.get('subsidiary', "")
         explanation = data.get('explanation', "")
