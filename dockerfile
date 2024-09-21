@@ -1,20 +1,21 @@
-# Usamos una imagen de Ubuntu como base
-FROM ubuntu:latest
+FROM python:3.9.20-bookworm
 
-# Actualizamos el sistema e instalamos las dependencias necesarias
-RUN apt-get update && apt-get install -y python3 python3-pip default-libmysqlclient-dev build-essential pkg-config mysql-client libssl-dev
+COPY requirements.txt /
 
-# Establecemos el directorio de trabajo en /APIRestHNP
-WORKDIR /app
+RUN pip3 install --upgrade pip
 
-# Copy the current directory (our Flask app) into the container at /app
+RUN pip3 install -r /requirements.txt
+
+
+
 COPY . /app
 
-ENV FLASK_APP=api.py
+WORKDIR /app
 
-# Instalamos Django y mysqlclient
-RUN pip3 install --break-system-packages Flask mysqlclient Flask-SQLAlchemy PyMySQL python-dotenv 
 
-EXPOSE 5000
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+EXPOSE 8080
+
+
+
+CMD ["gunicorn","--config", "gunicorn_config.py", "api:app"]
